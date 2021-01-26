@@ -1,0 +1,47 @@
+//공통
+@import "./divide/common.scss";
+@import "./divide/reset.scss";
+@import "./library/vw.scss";
+
+//페이지별
+@import "./divide/findAddress.scss";
+@import "./divide/weather.scss";
+
+
+%clear {
+    &:after {
+        display: block;
+        clear: both;
+        content: "";
+    }
+}
+
+%imageResize {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    margin: auto;
+}
+
+@mixin line($lineCount: 1) {
+    /* 사용법 : @include line(라인수) */
+    @if ($lineCount == 1) {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    } @else {
+        /* autoprefixer: off */
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on */
+        display: block;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        -webkit-line-clamp: $lineCount;
+    }
+}

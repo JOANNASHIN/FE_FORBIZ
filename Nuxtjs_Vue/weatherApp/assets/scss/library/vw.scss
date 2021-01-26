@@ -1,0 +1,73 @@
+$viewport: 750px !default;
+$vw-callback: false !default;
+$vw-px-only: false !default;
+
+@function vw-separator($list, $separator: false) {
+    @if $separator == "comma" or $separator == "space" {
+        @return append($list, null, $separator);
+    }
+
+    @if function-exists("list-separator") == true {
+        @return list-separator($list);
+    }
+
+    $test-list: ();
+    @each $item in $list {
+        $test-list: append($test-list, $item, space);
+    }
+
+    @return if($test-list == $list, space, comma);
+}
+
+@function vw-convert($to, $values...) {
+    $result: ();
+    $separator: vw-separator($values);
+
+    @each $value in $values {
+        @if type-of($value) == "number" and unit($value) == "vw" and $to == "px" {
+            $result: append($result, ($value / $viewport) * 100 * 1vw, $separator);
+        }
+        @else if type-of($value) == "number" and unit($value) == "px" and $to == "vw" {
+            $result: append($result, ($value / $viewport) * 100 * 1vw, $separator);
+        }
+        @else if type-of($value) == "list" {
+            $value-separator: vw-separator($value);
+            $value: vw-convert($to, $value...);
+            $value: vw-separator($value, $value-separator);
+            $result: append($result, $value, $separator);
+        }
+        @else {
+            $result: append($result, $value, $separator);
+        }
+    }
+
+    @return if(length($result) == 1, nth($result, 1), $result);
+}
+
+@function vw($values...) {
+    @if $vw-px-only {
+        @return vw-convert(px, $values...);
+    } 
+    @else {
+        @return vw-convert(vw, $values...);
+    }
+}
+
+@mixin vw($properties, $values...) {
+    @if type-of($properties) == "map" {
+        @each $property in map-keys($properties) {
+            @include vw($property, map-get($properties, $property));
+        }
+    }
+    @else {
+        @each $property in $properties {
+            @if $vw-callback or $vw-px-only {
+                #{$property}: vw-convert(px, $values...);
+            }
+
+            @if not $vw-px-only {
+                #{$property}: vw-convert(vw, $values...);
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+.fb {
+    &__title {
+        color: #000;
+        font-weight: bold;
+        font-size: 30px;
+
+        &--hidden {
+            font-size: 0;
+            line-height: 0;
+        }
+    }
+}
