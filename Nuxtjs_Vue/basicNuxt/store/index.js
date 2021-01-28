@@ -1,4 +1,7 @@
 import Vuex from "vuex";
+import Vue from "vue";
+import globalTest from "~/mixin.js/global.js";
+Vue.mixin(globalTest);
 
 const store = () => new Vuex.Store({
     state: {

@@ -12,6 +12,14 @@ export default {
     ]
   },
 
+  //dev모드에서 자동 새로고침
+  watchers: {
+	webpack: {
+	  aggregateTimeout: 300,
+	  poll: 1000
+	}
+  },
+
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
   ],
